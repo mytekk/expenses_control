@@ -1,0 +1,9 @@
+{% if lista_kategorii %}
+	<ul>
+        {% for kategoria in lista_kategorii %}
+	        <li> {{ kategoria.name }} </li>
+        {% endfor %}
+	</ul>
+{% else %}
+    <p>Brak kategorii.</p>
+{% endif %}
