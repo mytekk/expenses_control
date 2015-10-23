@@ -1,6 +1,10 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.template import RequestContext, loader
 
 
 def index(request):
-	    return HttpResponse("Oto strona glowna projektu expenses_control.")
+        template = loader.get_template('expenses_control/index.html')
+        context = RequestContext(request, {})
+        return HttpResponse(template.render(context))
+	    
