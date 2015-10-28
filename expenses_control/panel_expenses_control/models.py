@@ -1,21 +1,57 @@
 from django.db import models
 from datetime import datetime
+from django.utils.timezone import *
 
 class Kontrahent(models.Model):
-	name = models.CharField(max_length=100)
+	nazwa = models.CharField(max_length=100)
+
+        def __unicode__(self):
+                return self.nazwa
+
+        class Meta:
+                verbose_name_plural = u"Kontrahenci"
+                ordering = ['nazwa']
 
 class Osoba(models.Model):
-        name = models.CharField(max_length=100)
+        nazwa = models.CharField(max_length=100)
+
+        def __unicode__(self):
+                return self.nazwa
+
+        class Meta:
+                verbose_name_plural = u"Osoby"
+                ordering = ['nazwa']
 
 class Zrodlo(models.Model):
-        name = models.CharField(max_length=100)
+        nazwa = models.CharField(max_length=100)
+
+        def __unicode__(self):
+                return self.nazwa
+
+        class Meta:
+                verbose_name_plural = u"Zrodla"
+                ordering = ['nazwa']
 
 class Kategoria(models.Model):
-        name = models.CharField(max_length=100)
+        nazwa = models.CharField(max_length=100)
+
+        def __unicode__(self):
+                return self.nazwa
+
+        class Meta:
+                verbose_name_plural = u"Kategorie"
+                ordering = ['nazwa']
 
 class Podkategoria(models.Model):
 	kategoria = models.ForeignKey('Kategoria')
-        name = models.CharField(max_length=100)
+        nazwa = models.CharField(max_length=100)
+
+        def __unicode__(self):
+                return self.nazwa
+
+        class Meta:
+                verbose_name_plural = u"Podkategorie"
+                ordering = ['nazwa']
 
 class Wydatek(models.Model):
 	zrodlo = models.ForeignKey('Zrodlo')
@@ -26,3 +62,6 @@ class Wydatek(models.Model):
 	podkategoria = models.ForeignKey('Podkategoria')
 	osoba = models.ForeignKey('Osoba')
         notatka = models.CharField(max_length=200)
+
+	class Meta:
+                verbose_name_plural = u"Wydatki"
