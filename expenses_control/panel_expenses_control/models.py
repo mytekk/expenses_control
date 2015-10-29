@@ -47,11 +47,11 @@ class Podkategoria(models.Model):
         nazwa = models.CharField(max_length=100)
 
         def __unicode__(self):
-                return self.nazwa
+                return self.kategoria.nazwa + u" -> " + self.nazwa
 
         class Meta:
                 verbose_name_plural = u"Podkategorie"
-                ordering = ['nazwa']
+                ordering = ['kategoria']
 
 class Wydatek(models.Model):
 	zrodlo = models.ForeignKey('Zrodlo')
