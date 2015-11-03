@@ -61,9 +61,13 @@
                     This is a header
                 </div>
                 <ul class="list-group list-group-flush">
-			{% for kategoria in lista_kategorii %}
-		                <li class="list-group-item"> {{ kategoria.name }} </li>
-		        {% endfor %}
+			{% if lista_par_miesiac_rok %}
+				{% for rekord in lista_par_miesiac_rok %}
+			                <li class="list-group-item"> {{ rekord.0 }} - {{ rekord.1 }} <a href="{% url "panel_expenses_control.views.index" rok=rekord.0 miesiac=rekord.1 %}">link</a>  </li>
+			        {% endfor %}
+			{% else %}
+				<li class="list-group-item"> brak danych </li>
+			{% endif %}
                 </ul>
                 <div class="panel-footer">
                     This is a footer
@@ -74,11 +78,18 @@
 <div class="col-lg-9">
 <div class="panel panel-info">
                 <div class="panel-heading">
-                    This is a header
+                    Wybrany miesciąc: {{ miesiac_nazwa }} {{ rok }}
                 </div>
                 <div class="panel-body">
                     <p>
-                        This is a panel</p>
+			Przekazany rok: {{ rok }}
+			<br>
+			Przekazany miesiac: {{ miesiac }}
+			<br>
+			Zadaj argumenty: <a href="{% url "panel_expenses_control.views.index" rok=2009 miesiac=5 %}">tutaj &rarr;</a>
+			<br>
+			Przejdż do bieżącego miesiąca: <a href="{% url "panel_expenses_control.views.index" %}">tutaj &rarr;</a>
+                    </p>
                 </div>
                 <div class="panel-footer">
                     This is a footer
@@ -86,15 +97,6 @@
 </div>
 </div>
 
-{% if lista_kategorii %}
-	<ul>
-        {% for kategoria in lista_kategorii %}
-	        <li> {{ kategoria.name }} </li>
-        {% endfor %}
-	</ul>
-{% else %}
-    <p>Brak kategorii.</p>
-{% endif %}
 {% endblock main_content  %}
 
 

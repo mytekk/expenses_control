@@ -20,7 +20,12 @@
                 <!-- Pager -->
                 <ul class="pager">
                     <li class="next">
-                        <a href="#">Older Posts &rarr;</a>
+                        {% if user.is_authenticated %}
+                                <a href="{% url "panel_expenses_control.views.index" %}">przejdź do aplikacji &rarr;</a>
+                        {% else %}
+                                <a href="{% url "django.contrib.auth.views.login" %}">przejdź do aplikacji &rarr;</a>
+                        {% endif %}
+
                     </li>
                 </ul>
             </div>
