@@ -1,5 +1,6 @@
 {% extends "expenses_control/szkielet.html" %}
 {% load staticfiles %}
+{% load panel_expenses_control_filters %}
 
 {% comment %}
 {% block navigation  %}
@@ -14,88 +15,122 @@
 
 <div class="container">
 
-<!-------->
-<div id="content">
-    <ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
-        <li class="active"><a href="#red" data-toggle="tab">Red</a></li>
-        <li><a href="#orange" data-toggle="tab">Orange</a></li>
-        <li><a href="#yellow" data-toggle="tab">Yellow</a></li>
-        <li><a href="#green" data-toggle="tab">Green</a></li>
-        <li><a href="#blue" data-toggle="tab">Blue</a></li>
-    </ul>
-    <div id="my-tab-content" class="tab-content">
-        <div class="tab-pane active" id="red">
-            <h1>Red</h1>
-            <p>red red red red red red</p>
-        </div>
-        <div class="tab-pane" id="orange">
-            <h1>Orange</h1>
-            <p>orange orange orange orange orange</p>
-        </div>
-        <div class="tab-pane" id="yellow">
-            <h1>Yellow</h1>
-            <p>yellow yellow yellow yellow yellow</p>
-        </div>
-        <div class="tab-pane" id="green">
-            <h1>Green</h1>
-            <p>green green green green green</p>
-        </div>
-        <div class="tab-pane" id="blue">
-            <h1>Blue</h1>
-            <p>blue blue blue blue blue</p>
-        </div>
-    </div>
-</div>
-
-
 <script type="text/javascript">
     jQuery(document).ready(function ($) {
         $('#tabs').tab();
     });
 </script>    
+
 </div> <!-- container -->
 
-<div class="col-lg-3">
-<div class="panel panel-info">
+<div class="col-lg-2">
+<div class="panel panel-info text-center">
                 <div class="panel-heading">
-                    This is a header
+                   Lista miesięcy 
                 </div>
                 <ul class="list-group list-group-flush">
 			{% if lista_par_miesiac_rok %}
 				{% for rekord in lista_par_miesiac_rok %}
-			                <li class="list-group-item"> {{ rekord.0 }} - {{ rekord.1 }} <a href="{% url "panel_expenses_control.views.index" rok=rekord.0 miesiac=rekord.1 %}">link</a>  </li>
+			                <li class="list-group-item"> <a href="{% url "panel_expenses_control.views.index" rok=rekord.0 miesiac=rekord.1 %}">{{ rekord.0 }} - {{ rekord.2 }}</a>  </li>
 			        {% endfor %}
 			{% else %}
 				<li class="list-group-item"> brak danych </li>
 			{% endif %}
                 </ul>
                 <div class="panel-footer">
-                    This is a footer
+                    Lista miesięcy
                 </div>
 </div>
 </div>
 
-<div class="col-lg-9">
+<div class="col-lg-10">
 <div class="panel panel-info">
                 <div class="panel-heading">
-                    Wybrany miesciąc: {{ miesiac_nazwa }} {{ rok }}
+                    Wybrany miesiąc: {{ miesiac_nazwa }} {{ rok }}
+		    <span class="pull-right"><a href="{% url "panel_expenses_control.views.index" %}">Przejdż do bieżącego miesiąca</a></span>
                 </div>
                 <div class="panel-body">
-                    <p>
-			Przekazany rok: {{ rok }}
+
+
+		    <ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
+	            <li class="active"><a href="#wydatki" data-toggle="tab">Wydatki</a></li>
+            	    <li><a href="#statystyki" data-toggle="tab">Statystyki</a></li>
+		    <li><a href="#inne" data-toggle="tab">Inne</a></li>
+		    </ul>
+		    <div id="my-tab-content" class="tab-content">
+
+			<div class="tab-pane active" id="wydatki">
 			<br>
-			Przekazany miesiac: {{ miesiac }}
-			<br>
-			Zadaj argumenty: <a href="{% url "panel_expenses_control.views.index" rok=2009 miesiac=5 %}">tutaj &rarr;</a>
-			<br>
-			Przejdż do bieżącego miesiąca: <a href="{% url "panel_expenses_control.views.index" %}">tutaj &rarr;</a>
-                    </p>
+		        {% if wydatki|length != 0 %}
+		        <div class="table-responsive">
+		                <table class="table table-hover table-curved">
+		                        <thead>
+		                                <tr class="success">
+		                                        <th>#</th>
+		                                        <th>Źródło</th>
+		                                        <th>Data</th>
+		                                        <th>Kontrahent</th>
+		                                        <th>Kwota</th>
+		                                        <th>Kategoria</th>
+		                                        <th>Podkategoria</th>
+		                                        <th>Dotyczy osoby</th>
+		                                        <th>Notatka</th>
+		                                </tr>
+		                        </thead>
+		                        <tbody id="myTable">
+		                                {% for wydatek in wydatki %}
+		                                        <tr     class="{% if forloop.counter|divisibleby:2 %} warning {% endif %}">
+		                                                <td>{{forloop.counter}}</td>
+		                                                <td>{{wydatek.zrodlo}}</td>
+		                                                <td>{{wydatek.data|date:"d.m.Y"}}</td>
+		                                                <td>{{wydatek.kontrahent}}</td>
+		                                                <td class="text-center">{{wydatek.kwota}}</td>
+		                                                <td>{{wydatek.kategoria}}</td>
+		                                                <td>{{wydatek.podkategoria}}</td>
+		                                                <td>{{wydatek.osoba}}</td>
+		                                                <td>{{wydatek.notatka}}</td>
+		                                        </tr>
+		                                {% endfor %}
+		                        </tbody>
+		                </table>
+		        </div>
+		        {% else %}
+			<center><i>Nie ma jeszcze żadnych wydatków w tym miesiącu...<br><br></i></center>
+		        {% endif %}
+			</div>
+
+			<div class="tab-pane" id="statystyki">
+                            <h1>statystyki</h1>
+                            <p>Suma wszystkich wydatków: {{ suma_wszystkich_wydatkow.suma_miesieczna }}</p>
+				<br>
+				<br>
+					{% for rekord in suma_per_kategoria %}
+						Kategoria: {{ rekord.kategoria__nazwa }} suma: {{ rekord.suma_w_kategorii }}<br>
+					{% endfor %}
+                        </div>
+
+			<div class="tab-pane" id="inne">
+			    <h1>inne</h1>
+	                    <p>
+				Przekazany rok: {{ rok }}
+				<br>
+				Przekazany miesiac: {{ miesiac }}
+				<br>
+				Zadaj argumenty: <a href="{% url "panel_expenses_control.views.index" rok=2009 miesiac=5 %}">tutaj &rarr;</a>
+				<br>
+				Przejdż do bieżącego miesiąca: <a href="{% url "panel_expenses_control.views.index" %}">tutaj &rarr;</a>
+	                    </p>
+			</div>
+
+		    </div>
                 </div>
                 <div class="panel-footer">
                     This is a footer
                 </div>
 </div>
 </div>
+
+
 
 {% endblock main_content  %}
 
