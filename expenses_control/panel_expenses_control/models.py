@@ -59,9 +59,9 @@ class Wydatek(models.Model):
 	kontrahent = models.ForeignKey('Kontrahent')
 	kwota = models.DecimalField(max_digits=7, decimal_places=2)
         kategoria = models.ForeignKey('Kategoria')
-	podkategoria = models.ForeignKey('Podkategoria')
+	podkategoria = models.ForeignKey('Podkategoria', null=True)
 	osoba = models.ForeignKey('Osoba')
-        notatka = models.CharField(max_length=200)
+        notatka = models.CharField(max_length=200, null=True)
 
 	class Meta:
                 verbose_name_plural = u"Wydatki"

@@ -47,7 +47,7 @@
 <div class="panel panel-info">
                 <div class="panel-heading">
                     Wybrany miesiąc: {{ miesiac_nazwa }} {{ rok }}
-		    <span class="pull-right"><a href="{% url "panel_expenses_control.views.index" %}">Przejdż do bieżącego miesiąca</a></span>
+		    <span class="pull-right"><a href="{% url "panel_expenses_control.views.index" %}">Przejdż do bieżącego miesiąca</a>&nbsp;<a href="{% url "panel_expenses_control.views.nowywydatek" %}">Dodaj nowy wydatek</a></span>
                 </div>
                 <div class="panel-body">
 
@@ -121,6 +121,7 @@
 				Przejdż do bieżącego miesiąca: <a href="{% url "panel_expenses_control.views.index" %}">tutaj &rarr;</a>
 	                    </p>
 			</div>
+
 
 		    </div>
                 </div>

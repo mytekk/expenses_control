@@ -32,7 +32,6 @@
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 
-
 </head>
 
 <body>
@@ -206,10 +205,8 @@
     <script type="text/javascript" src="/static/js/jquery.js"></script>
 
     <!-- Bootstrap Core JavaScript -->
-    <script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
 
     <!-- Custom Theme JavaScript -->
-    <script type="text/javascript" src="/static/js/clean-blog.min.js"></script>
 {% endblock jquery_scripts %}
 
 </body>

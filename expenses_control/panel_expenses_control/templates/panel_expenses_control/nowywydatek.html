@@ -1,0 +1,249 @@
+{% extends "expenses_control/szkielet.html" %}
+{% load staticfiles %}
+{% load panel_expenses_control_filters %}
+
+{% comment %}
+{% block navigation  %}
+{% endblock navigation  %}
+
+
+{% block header  %}
+{% endblock header  %}
+{% endcomment %}
+
+{% block main_content  %}
+
+
+
+<div class="container">
+
+</div> <!-- container -->
+
+<div class="col-lg-2">
+<div class="panel panel-info text-center">
+                <div class="panel-heading">
+                   Lista miesięcy 
+                </div>
+                <ul class="list-group list-group-flush">
+			{% if lista_par_miesiac_rok %}
+				{% for rekord in lista_par_miesiac_rok %}
+			                <li class="list-group-item"> <a href="{% url "panel_expenses_control.views.index" rok=rekord.0 miesiac=rekord.1 %}">{{ rekord.0 }} - {{ rekord.2 }}</a>  </li>
+			        {% endfor %}
+			{% else %}
+				<li class="list-group-item"> brak danych </li>
+			{% endif %}
+                </ul>
+                <div class="panel-footer">
+                    Lista miesięcy
+                </div>
+</div>
+</div>
+
+<div class="col-lg-10">
+<div class="panel panel-info">
+                <div class="panel-heading">
+			Dodawanie nowego wydatku
+		    <span class="pull-right"><a href="{% url "panel_expenses_control.views.index" %}">Przejdż do bieżącego miesiąca</a>&nbsp;<a href="{% url "panel_expenses_control.views.nowywydatek" %}">Dodaj nowy wydatek</a></span>
+                </div>
+                <div class="panel-body">
+
+flaga: {{ flaga }}
+
+<form accept-charset="UTF-8" method="POST" class="form-horizontal" action="">{% csrf_token %}
+	<fieldset>
+		{% if messages %}
+			{% for message in messages %}
+				<div class="form-group">
+					<div class="col-sm-offset-3 col-sm-7">
+						<div class="alert alert-success">
+							<span class="glyphicon glyphicon-exclamation-sign"></span>&nbsp;{{ message }}
+						</div>
+					</div>
+				</div>
+			{% endfor %}
+		{% endif %}
+
+                {% if form.errors %}
+                        <div class="form-group">
+                        <div class="col-sm-offset-3 col-sm-7">
+                                <div class="alert alert-warning">
+                                <span class="glyphicon glyphicon-exclamation-sign"></span>&nbsp;Uzupełnij wymagane pola i spróbuj jeszcze raz.
+                        </div>
+                        </div>
+                </div>
+                {% endif %}
+
+		                <div class="form-group">
+                                        <label class="col-sm-3 control-label">{{ form.zrodlo.label_tag }}</label>
+                                        <div class="col-sm-7">
+                                                <div class="radio input-lg">
+							{% for wartosc, tekst in form.zrodlo.field.choices %}
+                                                        	<input type="radio" name="{{ form.zrodlo.name }}" value="{{ wartosc }}" {% if  form.zrodlo.value|stringformat:"s" == wartosc|stringformat:"s" %} checked {% endif %} >{{ tekst }}<br>
+							{% endfor %}
+                                                </div>
+                                                {% if form.zrodlo.errors %}
+                                                        <div class="has-error"><span class="help-block">{{ form.zrodlo.errors.as_text }}</span></div>
+                                                {% endif %}
+
+                                        </div>
+                                </div>
+
+                                <div class="form-group">
+                                        <label class="col-sm-3 control-label">{{ form.data.label_tag }}</label>
+                                        <div class="col-sm-7">
+						<div class="input-group">
+							<input type="text" name="{{ form.data.name }}" id="datepicker" class="form-control input-lg" {% if form.data.value %}value="{{ form.data.value }}"{% endif %}></input>
+						</div>
+                                                {% if form.data.errors %}
+                                                        <div class="has-error"><span class="help-block">{{ form.data.errors.as_text }}</span></div>
+                                                {% endif %}
+
+                                        </div>
+                                </div>
+
+                                <div class="form-group">
+                                        <label class="col-sm-3 control-label">{{ form.kwota.label_tag }}</label>
+                                        <div class="col-sm-7">
+                                                <div class="input-group">
+							<input type="number" class="form-control input-lg" name="{{ form.kwota.name }}" step="0.01" {% if form.kwota.value %}value={{ form.kwota.value }}{% endif %}>
+                                                </div>
+                                                {% if form.kwota.errors %}
+                                                        <div class="has-error"><span class="help-block">{{ form.kwota.errors.as_text }}</span></div>
+                                                {% endif %}
+
+                                        </div>
+                                </div>
+
+                                <div class="form-group">
+                                        <label class="col-sm-3 control-label">{{ form.kontrahent.label_tag }}</label>
+                                        <div class="col-sm-7">
+                                                <select class="form-control input-lg" name="{{ form.kontrahent.name }}">
+                                                        {% for wartosc, tekst in form.kontrahent.field.choices %}
+                                                        <option value="{{wartosc}}" {% if  form.kontrahent.value|stringformat:"s" == wartosc|stringformat:"s" %} selected=selected {% endif %}>{{tekst}}</option>
+                                                        {% endfor %}
+                                                </select>
+                                                {% if form.kontrahent.errors %}
+                                                        <div class="has-error"><span class="help-block">{{ form.kontrahent.errors.as_text }}</span></div>
+                                                {% endif %}
+                                        </div>
+                                </div>
+
+                                <div class="form-group">
+                                        <label class="col-sm-3 control-label">{{ form.kategoria.label_tag }}</label>
+                                        <div class="col-sm-7">
+                                                <select id=kategoria class="form-control input-lg" name="{{ form.kategoria.name }}">
+                                                        {% for wartosc, tekst in form.kategoria.field.choices %}
+                                                        <option value="{{wartosc}}" {% if  form.kategoria.value|stringformat:"s" == wartosc|stringformat:"s" %} selected=selected {% endif %}>{{tekst}}</option>
+                                                        {% endfor %}
+                                                </select>
+                                                {% if form.kategoria.errors %}
+                                                        <div class="has-error"><span class="help-block">{{ form.kategoria.errors.as_text }}</span></div>
+                                                {% endif %}
+                                        </div>
+                                </div>
+
+                                <div class="form-group">
+                                        <label class="col-sm-3 control-label">{{ form.podkategoria.label_tag }}</label>
+                                        <div class="col-sm-7">
+                                                <select id=podkategoria class="form-control input-lg" name="{{ form.podkategoria.name }}">
+                                                        {% for wartosc, tekst in form.podkategoria.field.choices %}
+                                                        <option value="{{wartosc}}" {% if  form.podkategoria.value|stringformat:"s" == wartosc|stringformat:"s" %} selected=selected {% endif %}>{{tekst}}</option>
+                                                        {% endfor %}
+                                                </select>
+                                                {% if form.podkategoria.errors %}
+                                                        <div class="has-error"><span class="help-block">{{ form.podkategoria.errors.as_text }}</span></div>
+                                                {% endif %}
+                                        </div>
+                                </div>
+
+                                <div class="form-group">
+                                        <label class="col-sm-3 control-label">{{ form.osoba.label_tag }}</label>
+                                        <div class="col-sm-7">
+                                                <select class="form-control input-lg" name="{{ form.osoba.name }}">
+                                                        {% for wartosc, tekst in form.osoba.field.choices %}
+                                                        <option value="{{wartosc}}" {% if  form.osoba.value|stringformat:"s" == wartosc|stringformat:"s" %} selected=selected {% endif %}>{{tekst}}</option>
+                                                        {% endfor %}
+                                                </select>
+                                                {% if form.osoba.errors %}
+                                                        <div class="has-error"><span class="help-block">{{ form.osoba.errors.as_text }}</span></div>
+                                                {% endif %}
+                                        </div>
+                                </div>
+
+                                <div class="form-group">
+                                        <label class="col-sm-3 control-label">{{ form.notatka.label_tag }}</label>
+                                        <div class="col-sm-7">
+						<input name="{{ form.notatka.name }}" type="text" class="form-control input-lg" placeholder="tutaj wpisz..." {% if form.notatka.value %}value="{{ form.notatka.value }}"{% endif %}></input>
+                                                {% if form.notatka.errors %}
+                                                        <div class="has-error"><span class="help-block">{{ form.notatka.errors.as_text }}</span></div>
+                                                {% endif %}
+                                        </div>
+                                </div>
+
+<div class="form-group">
+                                <div class="col-sm-offset-3 col-sm-7">
+                                        <button type="submit" class="btn btn-primary">Zapisz</button>
+                                        &nbsp;
+                                        <button type="reset" class="btn btn-default">Wyczyść</button>
+                                </div>
+                        </div>
+
+	</fieldset>
+</form>
+
+{% now "Y-m-d" %}
+
+
+                </div>
+                <div class="panel-footer">
+                    This is a footer
+                </div>
+</div>
+</div>
+
+
+
+{% endblock main_content  %}
+
+{% block jquery_scripts %}
+    <!-- jQuery -->
+    <script type="text/javascript" src="/static/js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
+
+<script type="text/javascript" src="/static/js/jquery-ui.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/static/js/jquery-ui.min.css"/>
+<script type="text/javascript">
+$(function() {
+    $( "#datepicker" ).datepicker({ dateFormat: 'yy-mm-dd', firstDay: 1 });
+  });
+
+function ustawWartoscDaty() {
+        document.getElementById("datepicker").value = document.getElementById("datepicker").value;
+}
+
+
+
+
+$(function(){
+    $("select#kategoria").change(function(){
+      $.getJSON("/panel_expenses_control/podaj_podkategorie/"+$(this).val()+"", function(j) {
+        var options = '<option value="">-- brak --</option>';
+        for (var i = 0; i < j.length; i++) {
+          options += '<option value="' + parseInt(j[i].pk) + '">' + j[i].fields['nazwa'] + '</option>';
+        }
+        $("#podkategoria").html(options);
+        $("#podkategoria option:first").attr('selected', 'selected');
+        $("#podkategoria").attr('disabled', false);
+      })
+      $("#kategoria").attr('selected', 'selected');
+    })
+  })
+
+
+
+</script>
+
+
+{% endblock jquery_scripts %}
