@@ -152,7 +152,8 @@ hr.small {
   .intro-header .site-heading,
   .intro-header .post-heading,
   .intro-header .page-heading {
-    padding: 150px 0;
+    padding: 50px 0;
+/* mytek tutaj zmiana ze 150 na 50! - w min.css taka sama zmiana! */
   }
 }
 .intro-header .site-heading,
