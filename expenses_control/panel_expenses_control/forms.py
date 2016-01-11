@@ -12,6 +12,7 @@ class formularz_nowego_wpisu(forms.Form):
         podkategoria = forms.ModelChoiceField(label="Podkategoria:", queryset=Podkategoria.objects.all(), required=False, empty_label=u"-- brak --")
         osoba = forms.ModelChoiceField(label="Dotyczy osoby:", queryset=Osoba.objects.all(), empty_label=u"Wybierz wartość")
         notatka = forms.CharField(label='Notatka:', max_length=100, required=False)
+	wlasciciel = forms.IntegerField()
 
 #        zrodlo = models.ForeignKey('Zrodlo')
 #        data = models.DateField(auto_now=False, auto_now_add=False)

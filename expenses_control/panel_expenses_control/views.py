@@ -12,6 +12,7 @@ import datetime
 from django.db.models import Sum
 from .forms import formularz_nowego_wpisu
 from django.contrib import messages
+from django.contrib.auth.models import User
 
 def polish_month_name(month_number):
 	locale.setlocale(locale.LC_ALL, 'pl_PL.utf-8')
@@ -21,6 +22,8 @@ def index(request, rok=None, miesiac=None):
 	if not request.user.is_authenticated():
 		powrotny_url = reverse('django.contrib.auth.views.login')
 		return HttpResponseRedirect(powrotny_url)
+
+	user = request.user
 
 	lista_miesiecy = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 
@@ -38,11 +41,11 @@ def index(request, rok=None, miesiac=None):
 
 	lista_kategorii = Kategoria.objects.all()
 
-	wydatki = Wydatek.objects.filter(data__year=rok, data__month=miesiac).order_by('data')
-	suma_wszystkich_wydatkow = Wydatek.objects.filter(data__year=rok, data__month=miesiac).aggregate(suma_miesieczna=Sum('kwota'))
-	suma_per_kategoria = Wydatek.objects.filter(data__year=rok, data__month=miesiac).values('kategoria', 'kategoria__nazwa').annotate(suma_w_kategorii=Sum('kwota')).order_by('kategoria__nazwa')
+	wydatki = Wydatek.objects.filter(data__year=rok, data__month=miesiac, wlasciciel=user.pk).order_by('data')
+	suma_wszystkich_wydatkow = Wydatek.objects.filter(data__year=rok, data__month=miesiac, wlasciciel=user.pk).aggregate(suma_miesieczna=Sum('kwota'))
+	suma_per_kategoria = Wydatek.objects.filter(data__year=rok, data__month=miesiac, wlasciciel=user.pk).values('kategoria', 'kategoria__nazwa').annotate(suma_w_kategorii=Sum('kwota')).order_by('kategoria__nazwa')
 
-	lista_par_miesiac_rok = [(rekord.data.year, rekord.data.month, polish_month_name(rekord.data.month)) for rekord in Wydatek.objects.all()]
+	lista_par_miesiac_rok = [(rekord.data.year, rekord.data.month, polish_month_name(rekord.data.month)) for rekord in Wydatek.objects.filter(wlasciciel=user.pk)]
 	lista_par_miesiac_rok = list(set(lista_par_miesiac_rok))
 	lista_par_miesiac_rok = sorted(lista_par_miesiac_rok, reverse=True)
 
@@ -55,6 +58,8 @@ def nowywydatek(request):
         if not request.user.is_authenticated():
                 powrotny_url = reverse('django.contrib.auth.views.login')
                 return HttpResponseRedirect(powrotny_url)
+
+	user = request.user
 
 	print "jestem tu!"
 	flaga = "jeszcze nic nie wiem"
@@ -77,7 +82,8 @@ def nowywydatek(request):
 					kategoria = form.cleaned_data['kategoria'],
 					podkategoria = form.cleaned_data['podkategoria'],
 					osoba = form.cleaned_data['osoba'],
-					notatka = form.cleaned_data['notatka']
+					notatka = form.cleaned_data['notatka'],
+					wlasciciel = user
 					)
 
 			try:
@@ -105,15 +111,22 @@ def nowywydatek(request):
 	        now = datetime.datetime.now()
 	        dzis_data = str(now)[:10]
 
+		# ustalanie poczatkowej osoby, ktorej dotyczy wydatek (model osoba), jako obecnie zalogowana osoba (z tabeli auth_user)
+		if user.pk == 1:
+			domyslna_osoba = None 
+		elif user.pk == 2:
+			domyslna_osoba = 1
+		elif user.pk == 3:
+			domyslna_osoba = 3
+		else:
+			domyslna_osoba = None
 
-		form = formularz_nowego_wpisu(initial={'zrodlo': 1, 'data' : dzis_data, 'kwota' : 1.00, 'osoba' : 1})
+		form = formularz_nowego_wpisu(initial={'zrodlo': 1, 'data' : dzis_data, 'kwota' : 1.00, 'osoba' : domyslna_osoba})
 		flaga = "nie wyslano formularza!"
 
 
 	template = loader.get_template('panel_expenses_control/nowywydatek.html')
-	print "SLOWNIK"
 	slownik = {'form':form, 'flaga':flaga}
-	print slownik['form']
         context = RequestContext(request, slownik)
         return HttpResponse(template.render(context))
 

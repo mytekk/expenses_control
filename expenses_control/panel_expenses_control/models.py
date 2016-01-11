@@ -1,6 +1,7 @@
 from django.db import models
 from datetime import datetime
 from django.utils.timezone import *
+from django.contrib.auth.models import User
 
 class Kontrahent(models.Model):
 	nazwa = models.CharField(max_length=100)
@@ -62,6 +63,7 @@ class Wydatek(models.Model):
 	podkategoria = models.ForeignKey('Podkategoria', null=True)
 	osoba = models.ForeignKey('Osoba')
         notatka = models.CharField(max_length=200, null=True)
+	wlasciciel = models.ForeignKey(User)
 
 	class Meta:
                 verbose_name_plural = u"Wydatki"

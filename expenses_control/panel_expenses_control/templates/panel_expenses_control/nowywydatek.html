@@ -49,6 +49,8 @@
 
 flaga: {{ flaga }}
 
+uzytkownik: {{ user.pk }}
+
 <form accept-charset="UTF-8" method="POST" class="form-horizontal" action="">{% csrf_token %}
 	<fieldset>
 		{% if messages %}
@@ -179,6 +181,8 @@ flaga: {{ flaga }}
                                                 {% endif %}
                                         </div>
                                 </div>
+
+				<input name="{{form.wlasciciel.name}}" type="hidden" value="{{ user.pk }}">
 
 <div class="form-group">
                                 <div class="col-sm-offset-3 col-sm-7">
