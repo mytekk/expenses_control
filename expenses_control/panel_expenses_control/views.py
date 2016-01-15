@@ -15,8 +15,15 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 
 def polish_month_name(month_number):
-	locale.setlocale(locale.LC_ALL, 'pl_PL.utf-8')
+	locale.setlocale(locale.LC_ALL, 'pl_PL.UTF-8')
 	return calendar.month_name[month_number]
+
+def daj_liste_par_miesiac_rok(user_id):
+	lista_par_miesiac_rok = [(rekord.data.year, rekord.data.month, polish_month_name(rekord.data.month)) for rekord in Wydatek.objects.filter(wlasciciel=user_id)]
+	lista_par_miesiac_rok = list(set(lista_par_miesiac_rok))
+	lista_par_miesiac_rok = sorted(lista_par_miesiac_rok, reverse=True)
+	return lista_par_miesiac_rok
+
 
 def index(request, rok=None, miesiac=None):
 	if not request.user.is_authenticated():
@@ -45,9 +52,7 @@ def index(request, rok=None, miesiac=None):
 	suma_wszystkich_wydatkow = Wydatek.objects.filter(data__year=rok, data__month=miesiac, wlasciciel=user.pk).aggregate(suma_miesieczna=Sum('kwota'))
 	suma_per_kategoria = Wydatek.objects.filter(data__year=rok, data__month=miesiac, wlasciciel=user.pk).values('kategoria', 'kategoria__nazwa').annotate(suma_w_kategorii=Sum('kwota')).order_by('kategoria__nazwa')
 
-	lista_par_miesiac_rok = [(rekord.data.year, rekord.data.month, polish_month_name(rekord.data.month)) for rekord in Wydatek.objects.filter(wlasciciel=user.pk)]
-	lista_par_miesiac_rok = list(set(lista_par_miesiac_rok))
-	lista_par_miesiac_rok = sorted(lista_par_miesiac_rok, reverse=True)
+	lista_par_miesiac_rok = daj_liste_par_miesiac_rok(user.pk)
 
 	template = loader.get_template('panel_expenses_control/index.html')
 	slownik = {'lista_kategorii': lista_kategorii, 'lista_par_miesiac_rok' : lista_par_miesiac_rok, 'rok' : rok, 'miesiac' : miesiac, 'miesiac_nazwa' : miesiac_nazwa, 'wydatki':wydatki, 'suma_wszystkich_wydatkow':suma_wszystkich_wydatkow, 'suma_per_kategoria':suma_per_kategoria}
@@ -124,9 +129,10 @@ def nowywydatek(request):
 		form = formularz_nowego_wpisu(initial={'zrodlo': 1, 'data' : dzis_data, 'kwota' : 1.00, 'osoba' : domyslna_osoba})
 		flaga = "nie wyslano formularza!"
 
+        lista_par_miesiac_rok = daj_liste_par_miesiac_rok(user.pk)
 
 	template = loader.get_template('panel_expenses_control/nowywydatek.html')
-	slownik = {'form':form, 'flaga':flaga}
+	slownik = {'form':form, 'flaga':flaga, 'lista_par_miesiac_rok' : lista_par_miesiac_rok}
         context = RequestContext(request, slownik)
         return HttpResponse(template.render(context))
 
@@ -134,3 +140,18 @@ def podaj_podkategorie(request, kat_id):
 	from django.core import serializers
 	json_podkat = serializers.serialize("json", Podkategoria.objects.filter(kategoria = kat_id))
 	return HttpResponse(json_podkat, content_type="application/javascript")
+
+def about(request):
+        template = loader.get_template('panel_expenses_control/about.html')
+        context = RequestContext(request, {})
+        return HttpResponse(template.render(context))
+
+def post(request):
+        template = loader.get_template('panel_expenses_control/post.html')
+        context = RequestContext(request, {})
+        return HttpResponse(template.render(context))
+
+def contact(request):
+        template = loader.get_template('panel_expenses_control/contact.html')
+        context = RequestContext(request, {})
+        return HttpResponse(template.render(context))
