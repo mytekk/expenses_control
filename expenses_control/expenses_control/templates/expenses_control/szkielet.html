@@ -9,9 +9,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="author" content="Bartłomiej Mytko">
 
-    <title>Clean Blog</title>
+    <title>ExpensesControlPanel</title>
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css"/>
@@ -48,7 +48,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="{% url "expenses_control.views.index" %}">Start Page</a>
+                <a class="navbar-brand" href="{% url "expenses_control.views.index" %}">Strona startowa</a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
@@ -56,23 +56,23 @@
                 <ul class="nav navbar-nav navbar-right">
 		    <li>
 			{% if user.is_authenticated %}
-                                <li><a>Zalogowany użytkownik: <b>{{ user.first_name }} {{ user.last_name }}</b></a></li>
-                                <li><a href="{% url "expenses_control.views.logout_page" %}">wyloguj się</a></li>
+                                <li><a>Zalogowany użytkownik:&nbsp;&nbsp;<b>{{ user.first_name }} {{ user.last_name }}</b></a></li>
+                                <li><a href="{% url "expenses_control.views.logout_page" %}">Wyloguj się</a></li>
                         {% else %}
                                 <li><a href="{% url "django.contrib.auth.views.login" %}">Zaloguj się</a></li>
                         {% endif %}
 		    </li>
+		    <li>
+                        <a href="{% url "panel_expenses_control.views.index" %}">Twoje wydatki</a>
+                    </li>		    
                     <li>
-                        <a href="index.html">Home</a>
+                        <a href="{% url "panel_expenses_control.views.about" %}">O programie</a>
                     </li>
                     <li>
-                        <a href="about.html">About</a>
+                        <a href="{% url "panel_expenses_control.views.post" %}">Aktualnosci</a>
                     </li>
                     <li>
-                        <a href="post.html">Sample Post</a>
-                    </li>
-                    <li>
-                        <a href="contact.html">Contact</a>
+                        <a href="{% url "panel_expenses_control.views.contact" %}">Kontakt</a>
                     </li>
                 </ul>
             </div>
@@ -92,7 +92,7 @@
                     <div class="site-heading">
                         <h2>Expenses Control Panel</h2>
                         <hr class="small">
-                        <span class="subheading">A Clean Blog Theme by Start Bootstrap</span>
+                        <span class="subheading">aplikacja do ewidencjonowania wydatków</span>
                     </div>
                 </div>
             </div>
@@ -194,7 +194,8 @@
                             </a>
                         </li>
                     </ul>
-                    <p class="copyright text-muted">Copyright &copy; Your Website 2014</p>
+                    <p class="copyright text-muted">Copyright &copy; Expenses Control Panel 2016</p>
+		    <p class="copyright text-muted"><span class="glyphicon glyphicon-registration-mark" aria-hidden="true"></span> ECP 1.0-0</p>
                 </div>
             </div>
         </div>

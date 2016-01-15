@@ -20,36 +20,23 @@
 </div> <!-- container -->
 
 <div class="col-lg-2">
-<div class="panel panel-info text-center">
-                <div class="panel-heading">
-                   Lista miesięcy 
-                </div>
-                <ul class="list-group list-group-flush">
-			{% if lista_par_miesiac_rok %}
-				{% for rekord in lista_par_miesiac_rok %}
-			                <li class="list-group-item"> <a href="{% url "panel_expenses_control.views.index" rok=rekord.0 miesiac=rekord.1 %}">{{ rekord.0 }} - {{ rekord.2 }}</a>  </li>
-			        {% endfor %}
-			{% else %}
-				<li class="list-group-item"> brak danych </li>
-			{% endif %}
-                </ul>
-                <div class="panel-footer">
-                    Lista miesięcy
-                </div>
-</div>
+
+{% include "panel_expenses_control/panel_lista_miesiecy.html" %}
+
 </div>
 
 <div class="col-lg-10">
 <div class="panel panel-info">
-                <div class="panel-heading">
-			Dodawanie nowego wydatku
-		    <span class="pull-right"><a href="{% url "panel_expenses_control.views.index" %}">Przejdż do bieżącego miesiąca</a>&nbsp;<a href="{% url "panel_expenses_control.views.nowywydatek" %}">Dodaj nowy wydatek</a></span>
+		<div class="panel-heading">
+                    <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>&nbsp;Dodawanie nowego wydatku
+                    <span class="pull-right">
+                        <span class="glyphicon glyphicon-share-alt" aria-hidden="true"></span>&nbsp;<a href="{% url "panel_expenses_control.views.index" %}">Przejdź do bieżącego miesiąca</a>
+                        &nbsp;&nbsp;
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;<a href="{% url "panel_expenses_control.views.nowywydatek" %}">Dodaj nowy wydatek</a>
+                    </span>
                 </div>
                 <div class="panel-body">
 
-flaga: {{ flaga }}
-
-uzytkownik: {{ user.pk }}
 
 <form accept-charset="UTF-8" method="POST" class="form-horizontal" action="">{% csrf_token %}
 	<fieldset>
@@ -186,21 +173,18 @@ uzytkownik: {{ user.pk }}
 
 <div class="form-group">
                                 <div class="col-sm-offset-3 col-sm-7">
-                                        <button type="submit" class="btn btn-primary">Zapisz</button>
+                                        <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span>&nbsp;&nbsp;Zapisz</button>
                                         &nbsp;
-                                        <button type="reset" class="btn btn-default">Wyczyść</button>
+                                        <button type="reset" class="btn btn-default"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>&nbsp;&nbsp;Wyczyść</button>
                                 </div>
                         </div>
 
 	</fieldset>
 </form>
 
-{% now "Y-m-d" %}
-
-
                 </div>
                 <div class="panel-footer">
-                    This is a footer
+                    &nbsp;
                 </div>
 </div>
 </div>

@@ -1,0 +1,49 @@
+{% extends "expenses_control/szkielet.html" %}
+{% load staticfiles %}
+
+
+{% block main_content  %}
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+		<h2 class="section-heading">Planowane prace</h2>
+		<p>Poniżej prezentujemy listę prac przewidzianych do wykonania w najbliższym czasie:</p>
+
+		<ul>
+                <li>dokończenie formularza kontaktowego,</li>
+                <li>dodawanie nowego wydatku: zmiana wyglądu wyboru kontrahenta, celem osiągnięcia lepszej przejrzystości (kategoryzacja kontrahentów),</li>
+		<li>kategoryzacja osób docelowych,</li>
+                <li>możliwośc usuwania zaznaczonych wydatków,</li>
+                <li>możliwość edycji wybranego wydatku,</li>
+                <li>wzbogacenie statystyk o sumę per osoba, per kontrahent,</li>
+                <li>graficzne przedstawianie statystyk,</li>
+                <li>dymek z większą ilością informacji o danym wydatku po najechaniu na niego kursorem,</li>
+                <li>uaktywnienie linków w stopce strony,</li>
+		<li>możliwość załączenia pliku do danego wydatku - np. skanu paragonu.</li>
+                </ul>
+
+
+		<h2 class="section-heading">ECP wersja startowa 1.0-0</h2>
+		<p>Poniżej prezentujemy listę funkcjonalności udostępnionych w pierwszej wersji Expenses Control Panel. Planowane są nowe funkcjonalności, oraz udoskonalanie istniejących, tak by uczynić Panel narzędziem funkcjonalnym i przyjaznym. O wszystkich zmianach będziemy na bieżąco informować.</p>
+
+		<ul>
+		<li>strona główna,</li>
+                <li>rozdzielenie projektu od aplikacji,</li>
+                <li>szkielet szablonów,</li>
+                <li>strona z informacjami o programie,</li>
+                <li>strona z aktualnościami,</li>
+                <li>formularz kontaktowy (dokończyć),</li>
+                <li>logowanie użytkowników</li>
+                <li>generowanie listy par rok-miesiąc zawierających wydatki zalogowanego użytkownika,</li>
+                <li>wyświetlanie tabelki w wszydtkimi wydatkami z zadanego miesiąca, dla danego użytkownika (w przygotowaniu jest zakładka ze statystykami danego miesiąca),</li>
+                <li>formularz umożliwiający zalogowanemu użytkownikowi dodawanie nowych wydatków.</li>
+		</ul>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock main_content  %}

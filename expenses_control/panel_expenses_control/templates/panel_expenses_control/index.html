@@ -24,30 +24,20 @@
 </div> <!-- container -->
 
 <div class="col-lg-2">
-<div class="panel panel-info text-center">
-                <div class="panel-heading">
-                   Lista miesięcy 
-                </div>
-                <ul class="list-group list-group-flush">
-			{% if lista_par_miesiac_rok %}
-				{% for rekord in lista_par_miesiac_rok %}
-			                <li class="list-group-item"> <a href="{% url "panel_expenses_control.views.index" rok=rekord.0 miesiac=rekord.1 %}">{{ rekord.0 }} - {{ rekord.2 }}</a>  </li>
-			        {% endfor %}
-			{% else %}
-				<li class="list-group-item"> brak danych </li>
-			{% endif %}
-                </ul>
-                <div class="panel-footer">
-                    Lista miesięcy
-                </div>
-</div>
+
+{% include "panel_expenses_control/panel_lista_miesiecy.html" %}
+
 </div>
 
 <div class="col-lg-10">
 <div class="panel panel-info">
                 <div class="panel-heading">
-                    Wybrany miesiąc: {{ miesiac_nazwa }} {{ rok }}
-		    <span class="pull-right"><a href="{% url "panel_expenses_control.views.index" %}">Przejdż do bieżącego miesiąca</a>&nbsp;<a href="{% url "panel_expenses_control.views.nowywydatek" %}">Dodaj nowy wydatek</a></span>
+                    <span class="glyphicon glyphicon-file" aria-hidden="true"></span>&nbsp;Wybrany miesiąc: {{ miesiac_nazwa }} {{ rok }}
+		    <span class="pull-right">
+			<span class="glyphicon glyphicon-share-alt" aria-hidden="true"></span>&nbsp;<a href="{% url "panel_expenses_control.views.index" %}">Przejdź do bieżącego miesiąca</a>
+			&nbsp;&nbsp;
+			<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;<a href="{% url "panel_expenses_control.views.nowywydatek" %}">Dodaj nowy wydatek</a>
+		    </span>
                 </div>
                 <div class="panel-body">
 
@@ -121,6 +111,10 @@
 				Zadaj argumenty: <a href="{% url "panel_expenses_control.views.index" rok=2009 miesiac=5 %}">tutaj &rarr;</a>
 				<br>
 				Przejdż do bieżącego miesiąca: <a href="{% url "panel_expenses_control.views.index" %}">tutaj &rarr;</a>
+				<br>
+				Dzisiejsza data: {% now "Y-m-d" %}
+				<br>
+				Zalogowany user_id: {{ user.pk }}
 	                    </p>
 			</div>
 
@@ -128,7 +122,7 @@
 		    </div>
                 </div>
                 <div class="panel-footer">
-                    This is a footer
+			&nbsp;
                 </div>
 </div>
 </div>
