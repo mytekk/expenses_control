@@ -36,6 +36,7 @@
 </div>
 {% endblock main_content %}
 
+{# nadpisuję blok jquery_scripts, tak by nie korzystać z 'Custom Theme JavaScript', które z jakiegoś powodu powoduje niemożliwośc wysłania formularza #}
 {% block jquery_scripts %}
     <!-- jQuery -->
     <script type="text/javascript" src="/static/js/jquery.js"></script>

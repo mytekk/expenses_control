@@ -2,29 +2,19 @@
 {% load staticfiles %}
 {% load panel_expenses_control_filters %}
 
-{% comment %}
-{% block navigation  %}
-{% endblock navigation  %}
-
-
-{% block header  %}
-{% endblock header  %}
-{% endcomment %}
 
 {% block main_content  %}
-
-
 
 <div class="container">
 
 </div> <!-- container -->
 
+{# panel z listą par rok-miesiac #}
 <div class="col-lg-2">
-
-{% include "panel_expenses_control/panel_lista_miesiecy.html" %}
-
+	{% include "panel_expenses_control/panel_lista_miesiecy.html" %}
 </div>
 
+{# prawa, główna, część strony z wydatkami, patrząc od góry mamy: panel, formularz #}
 <div class="col-lg-10">
 <div class="panel panel-info">
 		<div class="panel-heading">
@@ -134,7 +124,7 @@
                                 <div class="form-group">
                                         <label class="col-sm-3 control-label">{{ form.podkategoria.label_tag }}</label>
                                         <div class="col-sm-7">
-                                                <select id=podkategoria class="form-control input-lg" name="{{ form.podkategoria.name }}">
+                                                <select id=podkategoria class="form-control input-lg" name="{{ form.podkategoria.name }}" disabled>
                                                         {% for wartosc, tekst in form.podkategoria.field.choices %}
                                                         <option value="{{wartosc}}" {% if  form.podkategoria.value|stringformat:"s" == wartosc|stringformat:"s" %} selected=selected {% endif %}>{{tekst}}</option>
                                                         {% endfor %}
@@ -194,26 +184,23 @@
 {% endblock main_content  %}
 
 {% block jquery_scripts %}
-    <!-- jQuery -->
-    <script type="text/javascript" src="/static/js/jquery.js"></script>
+<!-- jQuery -->
+<script type="text/javascript" src="/static/js/jquery.js"></script>
 
-    <!-- Bootstrap Core JavaScript -->
-    <script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
+<!-- Bootstrap Core JavaScript -->
+<script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
 
+<!-- Dodane przeze mnie Jquery UI -->
 <script type="text/javascript" src="/static/js/jquery-ui.min.js"></script>
 <link rel="stylesheet" type="text/css" href="/static/js/jquery-ui.min.css"/>
+
+{# podpięcie kalendarza pod element formularza #}
 <script type="text/javascript">
 $(function() {
     $( "#datepicker" ).datepicker({ dateFormat: 'yy-mm-dd', firstDay: 1 });
   });
 
-function ustawWartoscDaty() {
-        document.getElementById("datepicker").value = document.getElementById("datepicker").value;
-}
-
-
-
-
+{# wybranie kategorii powoduje odblokowanie i odswiezenie listy podkategorii #}
 $(function(){
     $("select#kategoria").change(function(){
       $.getJSON("/panel_expenses_control/podaj_podkategorie/"+$(this).val()+"", function(j) {
@@ -228,10 +215,6 @@ $(function(){
       $("#kategoria").attr('selected', 'selected');
     })
   })
-
-
-
 </script>
-
 
 {% endblock jquery_scripts %}

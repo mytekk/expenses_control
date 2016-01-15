@@ -2,19 +2,12 @@
 {% load staticfiles %}
 {% load panel_expenses_control_filters %}
 
-{% comment %}
-{% block navigation  %}
-{% endblock navigation  %}
-
-
-{% block header  %}
-{% endblock header  %}
-{% endcomment %}
 
 {% block main_content  %}
 
 <div class="container">
 
+{# obsługa zakładek: wydatki, statystyki, inne #}
 <script type="text/javascript">
     jQuery(document).ready(function ($) {
         $('#tabs').tab();
@@ -23,12 +16,12 @@
 
 </div> <!-- container -->
 
+{# panel z listą par rok-miesiac #}
 <div class="col-lg-2">
-
-{% include "panel_expenses_control/panel_lista_miesiecy.html" %}
-
+	{% include "panel_expenses_control/panel_lista_miesiecy.html" %}
 </div>
 
+{# prawa, główna, część strony z wydatkami, patrząc od góry mamy: panel, zakładki, tabelka z wydatkami #}
 <div class="col-lg-10">
 <div class="panel panel-info">
                 <div class="panel-heading">
@@ -39,9 +32,8 @@
 			<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;<a href="{% url "panel_expenses_control.views.nowywydatek" %}">Dodaj nowy wydatek</a>
 		    </span>
                 </div>
+
                 <div class="panel-body">
-
-
 		    <ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
 	            <li class="active"><a href="#wydatki" data-toggle="tab">Wydatki</a></li>
             	    <li><a href="#statystyki" data-toggle="tab">Statystyki</a></li>
@@ -121,13 +113,12 @@
 
 		    </div>
                 </div>
+
                 <div class="panel-footer">
 			&nbsp;
                 </div>
 </div>
 </div>
-
-
 
 {% endblock main_content  %}
 

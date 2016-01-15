@@ -21,7 +21,6 @@ urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^logout/$',"expenses_control.views.logout_page"),
     url(r'^login/$',"django.contrib.auth.views.login"),
-    url(r'^flexselect/', include('flexselect.urls')),
     url(r'^panel_expenses_control/', include('panel_expenses_control.urls')),
     url(r'^admin/', include(admin.site.urls)),
 ]
