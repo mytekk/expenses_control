@@ -66,7 +66,6 @@ def nowywydatek(request):
 
 	user = request.user
 
-	print "jestem tu!"
 	flaga = "jeszcze nic nie wiem"
 
 	# if this is a POST request we need to process the form data
@@ -74,8 +73,6 @@ def nowywydatek(request):
 		# create a form instance and populate it with data from the request:
 		form = formularz_nowego_wpisu(request.POST)
 		form_kopia = formularz_nowego_wpisu(request.POST)
-		print "oto TUTAJ"
-		print request.POST
 		# check whether it's valid:
 		if form.is_valid():
 			# process the data in form.cleaned_data as required
@@ -99,14 +96,10 @@ def nowywydatek(request):
 
 				messages.error(request, 'Wystąpił błąd podczas próby zapisu.')
 
-			flaga = "jest OK!"
-			print nowy_wydatek
-			print "jest OK"
 			# ...
 			# redirect to a new URL:
 			return HttpResponseRedirect('nowywydatek')
 		else:
-			print "SYLWESTER"
 			#form = form_kopia
 			#czyli jesli wyslano bledy formularz, to wyswietlam go jeszcze raz, zeby nie tracic tych pol, ktore byly dobrze wpisane
 

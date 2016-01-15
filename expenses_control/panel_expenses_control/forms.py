@@ -13,12 +13,3 @@ class formularz_nowego_wpisu(forms.Form):
         osoba = forms.ModelChoiceField(label="Dotyczy osoby:", queryset=Osoba.objects.all(), empty_label=u"Wybierz wartość")
         notatka = forms.CharField(label='Notatka:', max_length=100, required=False)
 	wlasciciel = forms.IntegerField()
-
-#        zrodlo = models.ForeignKey('Zrodlo')
-#        data = models.DateField(auto_now=False, auto_now_add=False)
-#        kontrahent = models.ForeignKey('Kontrahent')
-#        kwota = models.DecimalField(max_digits=7, decimal_places=2)
-#        kategoria = models.ForeignKey('Kategoria')
-#        podkategoria = models.ForeignKey('Podkategoria')
-#        osoba = models.ForeignKey('Osoba')
-#        notatka = models.CharField(max_length=200)
