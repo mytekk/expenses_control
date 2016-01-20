@@ -203,18 +203,30 @@ $(function() {
 {# wybranie kategorii powoduje odblokowanie i odswiezenie listy podkategorii #}
 $(function(){
     $("select#kategoria").change(function(){
-      $.getJSON("/panel_expenses_control/podaj_podkategorie/"+$(this).val()+"", function(j) {
-        var options = '<option value="">-- brak --</option>';
-        for (var i = 0; i < j.length; i++) {
-          options += '<option value="' + parseInt(j[i].pk) + '">' + j[i].fields['nazwa'] + '</option>';
+        if ($(this).val() == null || $(this).val() == '')
+        {
+                //alert('wybrano pusta kategorie||'+ $(this).val()  +'||');
+                var options = '<option value="">-- brak --</option>';
+                $("#podkategoria").html(options);
+                $("#podkategoria option:first").attr('selected', 'selected');
+                $("#podkategoria").attr('disabled', true);
         }
-        $("#podkategoria").html(options);
-        $("#podkategoria option:first").attr('selected', 'selected');
-        $("#podkategoria").attr('disabled', false);
-      })
-      $("#kategoria").attr('selected', 'selected');
+        else
+        {
+                //alert('wybrano sesnowna kategorie||'+ $(this).val()  +'||');
+              $.getJSON("/panel_expenses_control/podaj_podkategorie/"+$(this).val()+"", function(j) {
+                var options = '<option value="">-- brak --</option>';
+                for (var i = 0; i < j.length; i++) {
+                  options += '<option value="' + parseInt(j[i].pk) + '">' + j[i].fields['nazwa'] + '</option>';
+                }
+                $("#podkategoria").html(options);
+                $("#podkategoria option:first").attr('selected', 'selected');
+                $("#podkategoria").attr('disabled', false);
+              })
+                $("#kategoria").attr('selected', 'selected');
+        }
     })
-  })
+})
 </script>
 
 {% endblock jquery_scripts %}
