@@ -51,13 +51,12 @@
                         </div>
                 </div>
                 {% endif %}
-
 		                <div class="form-group">
                                         <label class="col-sm-3 control-label">{{ form.zrodlo.label_tag }}</label>
                                         <div class="col-sm-7">
                                                 <div class="radio input-lg">
 							{% for wartosc, tekst in form.zrodlo.field.choices %}
-                                                        	<input type="radio" name="{{ form.zrodlo.name }}" value="{{ wartosc }}" {% if  form.zrodlo.value|stringformat:"s" == wartosc|stringformat:"s" %} checked {% endif %} >{{ tekst }}<br>
+                                                        	<label><input type="radio" name="{{ form.zrodlo.name }}" value="{{ wartosc }}" {% if  form.zrodlo.value|stringformat:"s" == wartosc|stringformat:"s" %} checked {% endif %} >{{ tekst }}</label>
 							{% endfor %}
                                                 </div>
                                                 {% if form.zrodlo.errors %}
