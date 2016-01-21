@@ -136,8 +136,18 @@ def nowywydatek(request):
 		else:
 			domyslna_osoba = None
 
+                # ustalanie poczatkowego zrodla, ktorego dotyczy wydatek
+                if user.pk == 1: # dla admina (z auth_user) brak domyślnego zrodla finansowania (z modelu Zrodlo)
+                        domyslne_zrodlo = None
+                elif user.pk == 2: # dla bartka (z auth_user) domyślne zrodlo finansowania to 'Dobre Konto' (z modelu Zrodlo)
+                        domyslne_zrodlo = 1
+                elif user.pk == 3: # dla marii (z auth_user) domyślne zrodlo finansowania to 'Konto Maria' (z modelu Zrodlo)
+                        domyslne_zrodlo = 2
+                else:
+                        domyslne_zrodlo = None
+
 		# nowy, czysty formularz
-		form = formularz_nowego_wpisu(initial={'zrodlo': 1, 'data' : dzis_data, 'kwota' : 1.00, 'osoba' : domyslna_osoba})
+		form = formularz_nowego_wpisu(initial={'zrodlo': 1, 'data' : dzis_data, 'kwota' : 1.00, 'osoba' : domyslna_osoba, 'zrodlo' : domyslne_zrodlo})
 		flaga = "nie wyslano formularza!"
 
 	# przygotowanie do wyświetlenia strony
