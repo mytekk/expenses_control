@@ -133,6 +133,8 @@ def nowywydatek(request):
 			domyslna_osoba = 1
 		elif user.pk == 3: # dla marii (z auth_user) domyślną osobą docelową jest 'Maria' (z modelu Osoba)
 			domyslna_osoba = 3
+                elif user.pk == 4: # dla mib (z auth_user) domyślną osobą docelową jest 'Dom' (z modelu Osoba)
+                        domyslna_osoba = 2		
 		else:
 			domyslna_osoba = None
 
@@ -143,6 +145,8 @@ def nowywydatek(request):
                         domyslne_zrodlo = 1
                 elif user.pk == 3: # dla marii (z auth_user) domyślne zrodlo finansowania to 'Konto Maria' (z modelu Zrodlo)
                         domyslne_zrodlo = 2
+                elif user.pk == 4: # dla mib (z auth_user) domyślne zrodlo finansowania to 'Konto Wspolne Biezace' (z modelu Zrodlo)
+                        domyslne_zrodlo = 5		
                 else:
                         domyslne_zrodlo = None
 
