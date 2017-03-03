@@ -84,13 +84,43 @@
 			</div>
 
 			<div class="tab-pane" id="statystyki">
-                            <h1>statystyki</h1>
-                            <p>Suma wszystkich wydatków: {{ suma_wszystkich_wydatkow.suma_miesieczna }}</p>
-				<br>
-				<br>
-					{% for rekord in suma_per_kategoria %}
-						Kategoria: {{ rekord.kategoria__nazwa }} suma: {{ rekord.suma_w_kategorii }}<br>
-					{% endfor %}
+                            <p><b>Suma wszystkich wydatków: {{ suma_wszystkich_wydatkow.suma_miesieczna }}</b></p>
+                            <p>Liczba wszystkich wydatków: {{ licznik_wszystkich_wydatkow.licznik_miesieczny }}</p>
+                            Sumy w poszczególnych kategoriach:
+                                        <ul>
+                                        {% for rekord in suma_per_kategoria %}
+                                                <br>
+                                                <li>Kategoria: <b>{{ rekord.kategoria__nazwa }}</b>, suma: <b>{{ rekord.suma_w_kategorii }}</b><br></li>
+
+                                                {% comment %} teraz przebiegam przez liste sum wszystkich podkategorii i wyswietlam tylko te zwiazane z biezaca kategoria {% endcomment %}
+                                                <ul>
+                                                {% for podrekord in suma_per_podkategoria %}
+                                                        {% if podrekord.kategoria == rekord.kategoria %}
+                                                                <li>{{ podrekord.podkategoria__nazwa }}: {{ podrekord.suma_w_podkategorii }}<br></li>
+                                                        {% endif %}
+                                                {% endfor %}
+                                                </ul>
+                                        {% endfor %}
+                                        </ul>
+                             Sumy per osoba:
+                             			<ul>
+                             			{% for rekord in suma_per_osoba %}
+                             					<li>Osoba: <b>{{ rekord.osoba__nazwa }}</b>, suma: <b>{{ rekord.suma_na_osobe }}</b><br></li>
+                             			{% endfor %}
+                             			</ul>
+                             Najpopularniejszy kontrahent, względem sumy wydatków:
+                             			<ul>
+                             			{% for rekord in suma_per_kontrahent %}
+                             					<li>Kontrahent: <b>{{ rekord.kontrahent__nazwa }}</b>, suma: <b>{{ rekord.suma_na_kontrahenta }}</b><br></li>
+                             			{% endfor %}
+                             			</ul>         
+                             Najpopularniejszy kontrahent, względem ilości wydatków:
+                             			<ul>
+                             			{% for rekord in licznik_per_kontrahent %}
+                             					<li>Kontrahent: <b>{{ rekord.kontrahent__nazwa }}</b>, suma: <b>{{ rekord.licznik_na_kontrahenta }}</b><br></li>
+                             			{% endfor %}
+                             			</ul>                                			                    			
+
                         </div>
 
 			<div class="tab-pane" id="inne">

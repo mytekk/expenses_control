@@ -9,7 +9,7 @@ from django.http import HttpResponseRedirect
 import calendar
 import locale
 import datetime
-from django.db.models import Sum
+from django.db.models import Sum, Count
 from .forms import formularz_nowego_wpisu
 from django.contrib import messages
 from django.contrib.auth.models import User
@@ -61,14 +61,19 @@ def index(request, rok=None, miesiac=None):
 
 	# podstawowe statystyki
 	suma_wszystkich_wydatkow = Wydatek.objects.filter(data__year=rok, data__month=miesiac, wlasciciel=user.pk).aggregate(suma_miesieczna=Sum('kwota'))
+	licznik_wszystkich_wydatkow = Wydatek.objects.filter(data__year=rok, data__month=miesiac, wlasciciel=user.pk).aggregate(licznik_miesieczny=Count('kwota'))
 	suma_per_kategoria = Wydatek.objects.filter(data__year=rok, data__month=miesiac, wlasciciel=user.pk).values('kategoria', 'kategoria__nazwa').annotate(suma_w_kategorii=Sum('kwota')).order_by('kategoria__nazwa')
+	suma_per_podkategoria = Wydatek.objects.filter(data__year=rok, data__month=miesiac, wlasciciel=user.pk).values('podkategoria', 'podkategoria__nazwa', 'kategoria', 'kategoria__nazwa').annotate(suma_w_podkategorii=Sum('kwota')).order_by('podkategoria__nazwa')
+	suma_per_osoba = Wydatek.objects.filter(data__year=rok, data__month=miesiac, wlasciciel=user.pk).values('osoba', 'osoba__nazwa').annotate(suma_na_osobe=Sum('kwota')).order_by('-suma_na_osobe')
+	suma_per_kontrahent = Wydatek.objects.filter(data__year=rok, data__month=miesiac, wlasciciel=user.pk).values('kontrahent', 'kontrahent__nazwa').annotate(suma_na_kontrahenta=Sum('kwota')).order_by('-suma_na_kontrahenta')
+	licznik_per_kontrahent = Wydatek.objects.filter(data__year=rok, data__month=miesiac, wlasciciel=user.pk).values('kontrahent', 'kontrahent__nazwa').annotate(licznik_na_kontrahenta=Count('kwota')).order_by('-licznik_na_kontrahenta')
 
 	# ustalam listę par rok-miesiac dla danego użytkownika
 	lista_par_miesiac_rok = daj_liste_par_miesiac_rok(user.pk)
 
 	# przygotowanie do wyświetlenia strony
 	template = loader.get_template('panel_expenses_control/index.html')
-	slownik = {'lista_kategorii': lista_kategorii, 'lista_par_miesiac_rok' : lista_par_miesiac_rok, 'rok' : rok, 'miesiac' : miesiac, 'miesiac_nazwa' : miesiac_nazwa, 'wydatki':wydatki, 'suma_wszystkich_wydatkow':suma_wszystkich_wydatkow, 'suma_per_kategoria':suma_per_kategoria}
+	slownik = {'lista_kategorii': lista_kategorii, 'lista_par_miesiac_rok' : lista_par_miesiac_rok, 'rok' : rok, 'miesiac' : miesiac, 'miesiac_nazwa' : miesiac_nazwa, 'wydatki':wydatki, 'suma_wszystkich_wydatkow':suma_wszystkich_wydatkow, 'licznik_wszystkich_wydatkow':licznik_wszystkich_wydatkow, 'suma_per_kategoria':suma_per_kategoria, 'suma_per_podkategoria':suma_per_podkategoria, 'suma_per_osoba':suma_per_osoba, 'suma_per_kontrahent':suma_per_kontrahent, 'licznik_per_kontrahent':licznik_per_kontrahent}
 	context = RequestContext(request, slownik)
 	return HttpResponse(template.render(context))
 
